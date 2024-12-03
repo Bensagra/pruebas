@@ -74,10 +74,10 @@
       <button type="submit">Reset Password</button>
     </form>
   </div>
-  <script>
+  <script >
     let params = new URLSearchParams(location.search);
     let uuid = params.get('uuid');
-    document.getElementById('reset-form').addEventListener('submit', function(event) {
+    document.getElementById('reset-form').addEventListener('submit', async function(event) {
       event.preventDefault();
       const newPassword = document.getElementById('new-password').value;
       const confirmPassword = document.getElementById('confirm-password').value;
@@ -87,24 +87,26 @@
         errorMessage.textContent = "Passwords do not match. Please try again.";
       } else {
         errorMessage.textContent = "";
-        fetch('https://mirrow-db.vercel.app/users/resetPassword', {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            password: newPassword,
-            uuid: uuid
+        alert(newPassword, )
+     try{
+      let info = await fetch('https://mirrow-db.vercel.app/users/resetPassword', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          password: newPassword,
+          resetToken: uuid
 
 
-          })
-        }).then(()=>
-        {
-          alert("Password reset successfully!");
-          this.submit();
-        }).catch((error) => {
-          console.error('Error:', error);
-        });
+        })
+
+      });
+      let data = await info.json();
+      console.log(data)
+     }catch{
+        console.log(info)
+     }
         
       }
     });
